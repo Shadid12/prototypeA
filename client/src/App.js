@@ -23,7 +23,12 @@ export default class App extends React.Component {
     }
 
     render() {
-        return(
+
+        const activeState = this.state.token ? (
+            <div>
+                Chat State
+            </div>
+        ) : (
             <div>
                 <GoogleLogin
                     clientId={data.key}
@@ -32,6 +37,11 @@ export default class App extends React.Component {
                     onSuccess={this.responseGoogle}
                     onFailure={this.responseGoogleFail}
                 />
+            </div>
+        )
+        return(
+            <div>
+                {activeState}
             </div>
         )
     }
