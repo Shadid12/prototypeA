@@ -1,12 +1,16 @@
 import React from 'react';
 import openSocket from 'socket.io-client';
 import { GoogleLogin, GoogleLogout } from 'react-google-login';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import axios from 'axios';
 
+import Chat from './Components/Chat';
 
 import data from './data.json';
 
-const socket = openSocket('localhost:5000');
+import './app.css';
+
+
 
 export default class App extends React.Component {
     constructor(props) {
@@ -16,10 +20,6 @@ export default class App extends React.Component {
         this.state = {
             toke: ''
         }
-
-        socket.on('connection', () => {
-            console.log('Mounted the Socket');
-        });
     }
 
     render() {
@@ -41,7 +41,9 @@ export default class App extends React.Component {
         )
         return(
             <div>
-                {activeState}
+                <MuiThemeProvider>
+                    <Chat socket={this.socket}/>
+                </MuiThemeProvider>
             </div>
         )
     }
