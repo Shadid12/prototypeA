@@ -9,6 +9,7 @@ import openSocket from 'socket.io-client';
 import axios from 'axios';
 
 import Plugins from './Plugins';
+import UsernameModal from './UsernameModal';
 
 
 export default class Chat extends React.Component {
@@ -27,9 +28,6 @@ export default class Chat extends React.Component {
         this.socket.on('RECEIVE_MESSAGE', (data) => {
                 
             if (this.state.token) {
-
-                axios.defaults.headers.common['Authorization'] = "Bearer " + this.state.token;
-
                 axios.post(`https://translation.googleapis.com/language/translate/v2`,
                         {
                             "q": data.message,
@@ -44,7 +42,6 @@ export default class Chat extends React.Component {
             } else {
                 this.setState({messages: [...this.state.messages, data]});
             }
-
         });
     }
 
@@ -62,6 +59,10 @@ export default class Chat extends React.Component {
             <Plugins setToken={this.setToken}/>
         )
 
+        const userNameModal = !this.state.username ? (
+            <UsernameModal username={this.state.username} setUserName={this.userNameHandler}/>
+        ) : null
+
         return(
             <div>
                 <div className="messages">
@@ -71,16 +72,16 @@ export default class Chat extends React.Component {
                         )
                     })}
                 </div>
-                <TextField
-                    hintText="username"
-                    value={this.state.username}
-                    onChange={this.usernameChange}
-                /><br />
                 <br />
                 <TextField
                     hintText="Write your message"
                     value={this.state.message}
                     onChange={this.messageChange}
+                    onKeyPress={ (e) => {
+                        if (e.key === 'Enter') {
+                          this.send()
+                        }
+                    } }
                 /><br />
                 <RaisedButton label="Send" 
                     primary={true}
@@ -88,6 +89,7 @@ export default class Chat extends React.Component {
                     onClick={this.send}
                 />
                 {translation}
+                {userNameModal}
             </div>
         )
     }
@@ -100,12 +102,12 @@ export default class Chat extends React.Component {
         this.setState({message: ''});
     }
 
-    messageChange = (e) => {
-        this.setState({message: e.target.value});
+    userNameHandler = (e) => {
+        this.setState({username: e})
     }
 
-    usernameChange = (e) => {
-        this.setState({username: e.target.value});
+    messageChange = (e) => {
+        this.setState({message: e.target.value});
     }
 
     setToken = (e) => {
