@@ -17,7 +17,7 @@ export default class Plugins extends React.Component {
         return(
             <div>
                 <GoogleLogin
-                    clientId={data.keys}
+                    clientId="1043178444240-fit0566r45gcbvog4tei1pour1ba436t.apps.googleusercontent.com"
                     buttonText="Enable Google Translation"
                     scope="https://www.googleapis.com/auth/cloud-translation"
                     onSuccess={this.responseGoogle}

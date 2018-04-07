@@ -3,6 +3,7 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
+import { GoogleLogin, GoogleLogout } from 'react-google-login';
 import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
 import openSocket from 'socket.io-client';
@@ -51,17 +52,6 @@ export default class Chat extends React.Component {
 
     render() {
 
-        const translation = this.state.token ? (
-            <div>
-                <DropDownMenu value={this.state.lang} onChange={this.handleLang}>
-                    <MenuItem value={'en'} primaryText="English" />
-                    <MenuItem value={'fr'} primaryText="French" />
-                    <MenuItem value={'es'} primaryText="Spanish" />
-                </DropDownMenu>
-            </div>
-        ) : (
-            <Plugins setToken={this.setToken}/>
-        )
 
         const userNameModal = !this.state.username ? (
             <UsernameModal username={this.state.username} setUserName={this.userNameHandler}/>
@@ -99,7 +89,6 @@ export default class Chat extends React.Component {
                     disabled={!this.state.username || !this.state.message}
                     onClick={this.send}
                 />
-                {translation}
                 {userNameModal}
                 <Drawer
                     docked={false}
@@ -107,9 +96,15 @@ export default class Chat extends React.Component {
                     open={this.state.open}
                     onRequestChange={(open) => this.setState({open})}
                 >
-                    <RaisedButton
-                        label="Open Drawer"
-                    />
+                    <div>
+                        <GoogleLogin
+                            clientId="1043178444240-fit0566r45gcbvog4tei1pour1ba436t.apps.googleusercontent.com"
+                            buttonText="Enable Google Translation"
+                            scope="https://www.googleapis.com/auth/cloud-translation"
+                            onSuccess={this.responseGoogle}
+                            onFailure={this.responseGoogleFail}
+                        />
+                    </div>
                 </Drawer>
             </div>
         )
@@ -139,5 +134,14 @@ export default class Chat extends React.Component {
     handleLang = (event, index, value) => this.setState({lang: value});
 
     select = (index) => this.setState({selectedIndex: index});
+
+    responseGoogle = (response) => {
+        if (response.accessToken) {
+            this.setState({token : response.accessToken, open: false});
+        }
+        else {
+            console.log('Could not authorize');
+        }
+    }
     
 }
