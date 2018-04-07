@@ -24,25 +24,10 @@ export default class App extends React.Component {
 
     render() {
 
-        const activeState = this.state.token ? (
-            <div>
-                Chat State
-            </div>
-        ) : (
-            <div>
-                <GoogleLogin
-                    clientId={data.key}
-                    buttonText="Authorize"
-                    scope="https://www.googleapis.com/auth/cloud-translation"
-                    onSuccess={this.responseGoogle}
-                    onFailure={this.responseGoogleFail}
-                />
-            </div>
-        )
         return(
             <div>
                 <MuiThemeProvider>
-                    <Chat socket={this.socket}/>
+                    <Chat />
                 </MuiThemeProvider>
             </div>
         )

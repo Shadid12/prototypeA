@@ -3,13 +3,15 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
-
-
+import AppBar from 'material-ui/AppBar';
+import Drawer from 'material-ui/Drawer';
 import openSocket from 'socket.io-client';
 import axios from 'axios';
 
 import Plugins from './Plugins';
 import UsernameModal from './UsernameModal';
+
+import './css/chat.css';
 
 
 export default class Chat extends React.Component {
@@ -20,7 +22,9 @@ export default class Chat extends React.Component {
             message: '',
             messages: [],
             token: '',
-            lang: 'en'
+            lang: 'en',
+            selectedIndex: 1,
+            open: false
         }
 
         this.socket = openSocket('localhost:5000');
@@ -64,25 +68,32 @@ export default class Chat extends React.Component {
         ) : null
 
         return(
-            <div>
+            <div className="main--wraper">
+                <AppBar
+                    title="Chit-Chat"
+                    iconClassNameRight="muidocs-icon-navigation-expand-more"
+                    onClick={() => {this.setState({open: true})}}
+                />
                 <div className="messages">
                     {this.state.messages.map(message => {
                         return (
-                            <div key={message.message}>{message.author}: {message.message}</div>
+                            <div key={message.message} className="message--list">{message.author}: {message.message}</div>
                         )
                     })}
                 </div>
                 <br />
-                <TextField
-                    hintText="Write your message"
-                    value={this.state.message}
-                    onChange={this.messageChange}
-                    onKeyPress={ (e) => {
-                        if (e.key === 'Enter') {
-                          this.send()
-                        }
-                    } }
-                /><br />
+                <div className="input">
+                    <TextField
+                        hintText="Write your message"
+                        value={this.state.message}
+                        onChange={this.messageChange}
+                        onKeyPress={ (e) => {
+                            if (e.key === 'Enter') {
+                            this.send()
+                            }
+                        } }
+                    />
+                </div>
                 <RaisedButton label="Send" 
                     primary={true}
                     disabled={!this.state.username || !this.state.message}
@@ -90,6 +101,16 @@ export default class Chat extends React.Component {
                 />
                 {translation}
                 {userNameModal}
+                <Drawer
+                    docked={false}
+                    width={200}
+                    open={this.state.open}
+                    onRequestChange={(open) => this.setState({open})}
+                >
+                    <RaisedButton
+                        label="Open Drawer"
+                    />
+                </Drawer>
             </div>
         )
     }
@@ -116,5 +137,7 @@ export default class Chat extends React.Component {
     }
 
     handleLang = (event, index, value) => this.setState({lang: value});
+
+    select = (index) => this.setState({selectedIndex: index});
     
 }

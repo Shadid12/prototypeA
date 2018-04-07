@@ -1,0 +1,23 @@
+.main--wraper {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.messages {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.message--list {
+    display: flex;
+    justify-content: center;
+    padding: 5px;
+}
+
+.input {
+    display: flex;
+    justify-content: center;
+    padding: 5px;
+}
