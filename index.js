@@ -9,6 +9,8 @@ const server = app.listen(PORT, function(){
     console.log('server is running on port 5000')
 });
 
+app.get('/', (req, res) => res.send({'hello': 'man'}));
+
 const io = socket(server);
 
 io.set('origins', '*:*');
