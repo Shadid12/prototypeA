@@ -9,8 +9,8 @@ import Drawer from 'material-ui/Drawer';
 import openSocket from 'socket.io-client';
 import axios from 'axios';
 
-import Plugins from './Plugins';
 import UsernameModal from './UsernameModal';
+import Widget from './Widget';
 
 import './css/chat.css';
 
@@ -25,10 +25,11 @@ export default class Chat extends React.Component {
             token: '',
             lang: 'en',
             selectedIndex: 1,
-            open: false
+            open: false,
+            gdrive: true
         }
 
-        this.socket = openSocket('localhost:5000');
+        this.socket = openSocket('https://fast-mountain-37717.herokuapp.com');
 
         this.socket.on('RECEIVE_MESSAGE', (data) => {
             this.setState({messages: [...this.state.messages, data]});
@@ -39,8 +40,8 @@ export default class Chat extends React.Component {
 
         const translationEnanbled = !this.state.token ? (
             <GoogleLogin
-                clientId=""
-                buttonText="Enable Translation"
+                clientId="1043178444240-fit0566r45gcbvog4tei1pour1ba436t.apps.googleusercontent.com"
+                buttonText="Translation Plugin"
                 scope="https://www.googleapis.com/auth/cloud-translation"
                 onSuccess={this.responseGoogle}
                 onFailure={this.responseGoogleFail}
@@ -81,6 +82,7 @@ export default class Chat extends React.Component {
                         } }
                     />
                 </div>
+                <Widget gdrive={this.state.gdrive}/>
                 <RaisedButton label="Send" 
                     primary={true}
                     disabled={!this.state.username || !this.state.message}
