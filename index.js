@@ -11,6 +11,8 @@ const server = app.listen(PORT, function(){
 
 const io = socket(server);
 
+io.set('origins', '*:*');
+
 io.on('connection', (socket) => {
     console.log(socket.id);
     

@@ -6,7 +6,6 @@ import axios from 'axios';
 
 import Chat from './Components/Chat';
 
-import data from './data.json';
 
 import './app.css';
 
