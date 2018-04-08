@@ -26,10 +26,10 @@ export default class Chat extends React.Component {
             lang: 'en',
             selectedIndex: 1,
             open: false,
-            gdrive: true
+            gdrive: false
         }
 
-        this.socket = openSocket('https://fast-mountain-37717.herokuapp.com');
+        this.socket = openSocket('localhost:5000');
 
         this.socket.on('RECEIVE_MESSAGE', (data) => {
             this.setState({messages: [...this.state.messages, data]});
@@ -42,7 +42,7 @@ export default class Chat extends React.Component {
             <GoogleLogin
                 clientId="1043178444240-fit0566r45gcbvog4tei1pour1ba436t.apps.googleusercontent.com"
                 buttonText="Translation Plugin"
-                scope="https://www.googleapis.com/auth/cloud-translation"
+                scope="https://www.googleapis.com/auth/cloud-translation https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.appdata"
                 onSuccess={this.responseGoogle}
                 onFailure={this.responseGoogleFail}
             />
@@ -133,7 +133,7 @@ export default class Chat extends React.Component {
     responseGoogle = (response) => {
         if (response.accessToken) {
             axios.defaults.headers.common['Authorization'] = "Bearer " + response.accessToken;
-            this.setState({token : response.accessToken, open: false});
+            this.setState({token : response.accessToken, open: false, gdrive: true});
         }
         else {
             console.log('Could not authorize');

@@ -1,18 +1,14 @@
 import React from 'react';
-import IconButton from 'material-ui/IconButton';
+import MdInsertDriveFile from 'react-icons/lib/md/insert-drive-file';
+import './css/widget.css';
 
 export default class Widget extends React.Component {
     render() {
         const widget = this.props.gdrive ? (
-            <div>
-                <IconButton
-                    iconClassName="muidocs-icon-custom-github" tooltip="bottom-right"
-                    tooltipPosition="bottom-right"
-                />
+            <div className="icon--container">
+                <MdInsertDriveFile size={30}/>
             </div>
-        ) : (
-            <div>Hello worlds</div>
-        )
+        ) : null
         return(
             <div>
                 {widget}
