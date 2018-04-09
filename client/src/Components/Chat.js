@@ -29,7 +29,7 @@ export default class Chat extends React.Component {
             gdrive: false
         }
 
-        this.socket = openSocket('fast-mountain-37717.herokuapp.com');
+        this.socket = openSocket('localhost:5000');
 
         this.socket.on('RECEIVE_MESSAGE', (data) => {
             this.setState({messages: [...this.state.messages, data]});
