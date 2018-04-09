@@ -42,7 +42,7 @@ export default class Chat extends React.Component {
             <GoogleLogin
                 clientId="1043178444240-fit0566r45gcbvog4tei1pour1ba436t.apps.googleusercontent.com"
                 buttonText="Translation Plugin"
-                scope="https://www.googleapis.com/auth/cloud-translation https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.appdata"
+                scope="https://www.googleapis.com/auth/cloud-translation https://www.googleapis.com/auth/drive"
                 onSuccess={this.responseGoogle}
                 onFailure={this.responseGoogleFail}
             />
@@ -58,7 +58,7 @@ export default class Chat extends React.Component {
         return(
             <div className="main--wraper">
                 <AppBar
-                    title="Chit-Chat"
+                    title="Chat App"
                     iconClassNameRight="muidocs-icon-navigation-expand-more"
                     onClick={() => {this.setState({open: true})}}
                 />
@@ -82,7 +82,7 @@ export default class Chat extends React.Component {
                         } }
                     />
                 </div>
-                <Widget gdrive={this.state.gdrive}/>
+                <Widget gdrive={this.state.gdrive} token={this.state}/>
                 <RaisedButton label="Send" 
                     primary={true}
                     disabled={!this.state.username || !this.state.message}
