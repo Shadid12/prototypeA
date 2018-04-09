@@ -6,7 +6,6 @@ export default class GoogleDrive {
     }
 
     create_doc_file(name) {
-        console.log('--->', this.token);
         axios.defaults.headers.common['Authorization'] = "Bearer " + this.token;
         axios.post("https://www.googleapis.com/upload/drive/v3/files", 
             {

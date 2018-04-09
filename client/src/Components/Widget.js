@@ -1,8 +1,9 @@
 import React from 'react';
 import MdInsertDriveFile from 'react-icons/lib/md/insert-drive-file';
 import axios from 'axios';
-
-import GoogleDrive from './services/google_drive';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
+import TextField from 'material-ui/TextField';
 import NewDocModal from './NewDocModal';
 
 import './css/widget.css';
@@ -16,6 +17,21 @@ export default class Widget extends React.Component {
         }
     }
     render() {
+
+        const actions = [
+            <FlatButton
+              label="Submit"
+              secondary={true}
+              onClick={ this.create }
+              disabled={!this.state.name}
+            />,
+            <FlatButton
+              label="Cancel"
+              secondary={true}
+              onClick={ () => {this.setState({ open_modal: false })} }
+            />,
+        ];
+
         const widget = this.props.gdrive ? (
             <div className="icon--container" onClick={ () => this.setState({open_modal: true}) }>
                 <MdInsertDriveFile size={30}/>
@@ -24,10 +40,20 @@ export default class Widget extends React.Component {
 
         const docModal = this.state.open_modal ? (
             <div>
-                <NewDocModal 
-                    closeModal={() => this.setState({ open_modal: false})} 
-                    create={this.createDoc}
-                />
+                <Dialog
+                    title="Create a new document now"
+                    actions={actions}
+                    modal={false}
+                    open={this.state.open_modal}
+                >
+            
+                    <TextField
+                        hintText="name"
+                        value={this.state.name}
+                        onChange={this.nameChange}
+                    />
+
+                </Dialog>
             </div>
         ) : null
 
@@ -39,12 +65,18 @@ export default class Widget extends React.Component {
         )
     }
 
-    createDoc = () => {
-        axios.post("https://www.googleapis.com/upload/drive/v3/files", 
-            {
-                "name": this.state.name,
-                "mimeType": "application/vnd.google-apps.document"
-            }
+
+    nameChange = (e) => {
+        this.setState({name: e.target.value});
+    }
+
+    create = () => {
+        let name = this.state.name;
+        axios.post("https://www.googleapis.com/drive/v3/files", 
+        {
+            "mimeType": "application/vnd.google-apps.document",
+            "name": name
+          }
         ).then(response => {
             console.log(response.data);
             this.setState({ open_modal: false });
